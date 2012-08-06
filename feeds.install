@@ -538,3 +538,16 @@ function feeds_update_7206() {
     'serialize' => TRUE,
   ));
 }
+
+/**
+ * Change config field from text to longtext.
+ */
+function feeds_update_7207() {
+  db_change_field('feeds_importer', 'config', 'config', array(
+    'type' => 'text',
+    'size' => 'big',
+    'not null' => FALSE,
+    'description' => 'Configuration of the feeds object.',
+    'serialize' => TRUE,
+  ));
+}

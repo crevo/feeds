@@ -1,0 +1,42 @@
+From 9432ac631ee7a47fe33f79609f1843346da6c940 Mon Sep 17 00:00:00 2001
+From: theduke <chris@theduke.at>
+Date: Fri, 27 Jul 2012 21:55:48 +0200
+Subject: [PATCH] Isse #1703074 by theduke: Added parser result to hook_feeds_presave
+
+---
+ feeds.api.php              |    4 +++-
+ plugins/FeedsProcessor.inc |    2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/feeds.api.php b/feeds.api.php
+index 389da82..6268aaf 100644
+--- a/feeds.api.php
++++ b/feeds.api.php
+@@ -104,8 +104,10 @@ function hook_feeds_after_parse(FeedsSource $source, FeedsParserResult $result)
+  *  FeedsSource object that describes the source that is being imported.
+  * @param $entity
+  *   The entity object.
++ * @param $item
++ *   The parser result for this entity.
+  */
+-function hook_feeds_presave(FeedsSource $source, $entity) {
++function hook_feeds_presave(FeedsSource $source, $entity, $item) {
+   if ($entity->feeds_item->entity_type == 'node') {
+     // Skip saving this entity.
+     $entity->feeds_item->skip = TRUE;
+diff --git a/plugins/FeedsProcessor.inc b/plugins/FeedsProcessor.inc
+index 029f9f4..56731d4 100644
+--- a/plugins/FeedsProcessor.inc
++++ b/plugins/FeedsProcessor.inc
+@@ -128,7 +128,7 @@ abstract class FeedsProcessor extends FeedsPlugin {
+           $this->entityValidate($entity);
+ 
+           // Allow modules to alter the entity before saving.
+-          module_invoke_all('feeds_presave', $source, $entity);
++          module_invoke_all('feeds_presave', $source, $entity, $item);
+           if (module_exists('rules')) {
+             rules_invoke_event('feeds_import_'. $source->importer()->id, $entity);
+           }
+-- 
+1.7.2.5
+

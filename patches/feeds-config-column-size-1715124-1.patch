@@ -1,0 +1,33 @@
+From 7edd5bf1c7344be9aea328dc16f4ae0f03dda5d5 Mon Sep 17 00:00:00 2001
+From: theduke <chris@theduke.at>
+Date: Mon, 6 Aug 2012 13:23:49 +0200
+Subject: [PATCH] Issue #1715124 by theduke: Changed size of config column to big.
+
+---
+ feeds.install |   13 +++++++++++++
+ 1 files changed, 13 insertions(+), 0 deletions(-)
+
+diff --git a/feeds.install b/feeds.install
+index 7a3322e..43d313d 100644
+--- a/feeds.install
++++ b/feeds.install
+@@ -538,3 +538,16 @@ function feeds_update_7206() {
+     'serialize' => TRUE,
+   ));
+ }
++
++/**
++ * Change config field from text to longtext.
++ */
++function feeds_update_7207() {
++  db_change_field('feeds_importer', 'config', 'config', array(
++    'type' => 'text',
++    'size' => 'big',
++    'not null' => FALSE,
++    'description' => 'Configuration of the feeds object.',
++    'serialize' => TRUE,
++  ));
++}
+-- 
+1.7.2.5
+
